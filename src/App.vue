@@ -1,19 +1,24 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <headers title="Expense Tracker"></headers>
+    <expense-home></expense-home>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import ExpenseHome from "./components/ExpenseHome.vue";
+import Headers from "./headers/Headers.vue";
 export default {
-  name: 'App',
   components: {
-    HelloWorld
-  }
-}
+    ExpenseHome,
+    Headers,
+  },
+  // data() {
+  //   return {
+      
+  //   };
+  // },
+};
 </script>
 
 <style>
