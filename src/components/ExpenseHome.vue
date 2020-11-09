@@ -1,19 +1,24 @@
 <template>
   <div>
     <base-card>
-      <button 
-        @click="setSelectedTab('expense-table')" 
-        :class="{flat: !selectedExpenseTable, selected: selectedExpenseTable}"
-        >Summary</button
+      <button
+        @click="setSelectedTab('expense-table')"
+        :class="{ flat: !selectedExpenseTable, selected: selectedExpenseTable }"
       >
-      <button 
+        Expenses
+      </button>
+      <button
         @click="setSelectedTab('add-expense')"
-        :class="{flat: !selectedAddExpense, selected: selectedAddExpense}"
-        >Add Expense</button
+        :class="{ flat: !selectedAddExpense, selected: selectedAddExpense }"
       >
+        Add Expense
+      </button>
       <!-- <base-button @click="setselectedtab('expense-summary')">{{ selectedTab }}</base-button> -->
     </base-card>
-    <component :is="selectedTab" v-bind:expenses="currentProps"></component>
+    <!-- <component :is="selectedTab" v-bind:expenses="currentProps"></component> -->
+    <keep-alive>
+      <component :is="selectedTab"></component>
+    </keep-alive>
   </div>
 </template>
 
@@ -30,43 +35,30 @@ export default {
     return {
       selectedTab: "expense-table",
       selectedExpenseTable: true,
-      expenses: [
-        {
-          id: "official-guide",
-          title: "Official Guide",
-          description: "hello",
-        },
-        {
-          id: "officia-guide",
-          title: "Official Guide",
-          description: "hell",
-        },
-      ],
+      selectedAddExpense: false,
     };
-  },
-
-  computed: {
-    currentProps() {
-      if (this.selectedTab === "expense-table") {        
-        return this.expenses;
-      }
-      return null
-    },
   },
 
   methods: {
     setSelectedTab(tab) {
       this.selectedTab = tab;
-      if(this.selectedTab === 'expense-table'){
-          this.selectedExpenseTable = true
-          this.selectedAddExpense = false
+      if (this.selectedTab === "expense-table") {
+        this.selectedExpenseTable = true;
+        this.selectedAddExpense = false;
       }
 
-      if(this.selectedTab === 'add-expense'){
-          this.selectedExpenseTable = false
-          this.selectedAddExpense = true
+      if (this.selectedTab === "add-expense") {
+        this.selectedExpenseTable = false;
+        this.selectedAddExpense = true;
       }
     },
+  },
+  mounted() {
+    this.$root.$on("eventing", (data) => {
+      if(data.amt) {
+        this.setSelectedTab("expense-table")
+      }
+    })
   },
 };
 </script>
