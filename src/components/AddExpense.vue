@@ -1,31 +1,42 @@
 <template>
   <div>
-    <!-- <base-dialog
+    <base-dialog
       v-if="inputIsInvalid"
       title="Invalid Input"
       @close="confirmError"
     >
       <template #default>
-        <p>Unfortunately, at least one input value is invalid.</p>
+        <p>The expense amount and date of expense is required.</p>
         <p>
-          Please check all inputs and make sure you enter at least a few
-          characters into each input field.
+          Please check all the inputs stated above and make sure you enter some value into each input field.
         </p>
       </template>
       <template #actions>
-        <base-button @click="confirmError">Okay</base-button>
+        <!-- <base-button @click="confirmError">Okay</base-button> -->
       </template>
-    </base-dialog> -->
+    </base-dialog>
     <base-card>
       <form @submit.prevent="submitData">
         <div class="form-control">
           <label for="amt">Amount</label>
-          <input id="amt" name="amt" type="text" v-model="amt" @keypress="onlyForCurrency" />
+          <input
+            id="amt"
+            name="amt"
+            type="text"
+            v-model="amt"
+            @keypress="onlyForCurrency"
+          />
         </div>
         <div class="form-control">
           <label for="expensetype">Expense Type</label>
           <v-select
-            :items="['General Expenses', 'Shopping', 'Utility', 'Travel', 'Misc']"
+            :items="[
+              'General Expenses',
+              'Shopping',
+              'Utility',
+              'Travel',
+              'Misc',
+            ]"
             dense
             outlined
             v-model="type"
@@ -79,25 +90,28 @@ export default {
       amt: 0,
       description: "",
       date: "",
+      inputIsInvalid: false,
       dateMenu: false,
       //items: ["Foo", "Bar", "Fizz", "Buzz"],
     };
   },
   methods: {
     submitData() {
-      this.$root.$emit('eventing', 
-        {
-            id: Math.random(), 
-            amt: Number(this.amt), 
-            date: this.date,
-            type: this.type,
-            description: this.description
-        });
-        this.type = ''
-        this.amt = 0
-        this.description= ""
-        this.date = ""
-
+      if (Number(this.amt) === 0 || this.date.trim() === "") {
+        this.inputIsInvalid = true;
+        return;
+      }
+      this.$root.$emit("eventing", {
+        id: Math.random(),
+        amt: Number(this.amt),
+        date: this.date,
+        type: this.type,
+        description: this.description,
+      });
+      this.type = "";
+      this.amt = 0;
+      this.description = "";
+      this.date = "";
     },
     onlyForCurrency($event) {
       // console.log($event.keyCode); //keyCodes value
@@ -120,6 +134,9 @@ export default {
       ) {
         $event.preventDefault();
       }
+    },
+    confirmError() {
+      this.inputIsInvalid = false;
     },
   },
 };

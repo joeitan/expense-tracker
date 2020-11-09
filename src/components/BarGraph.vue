@@ -39,7 +39,6 @@ export default {
   },
   methods: {
     renderLineChart: function () {
-      console.log("called");
       this.renderChart(
         {
           labels: [
@@ -70,7 +69,7 @@ export default {
   },
   watch: {
     expenses: function (newVal, oldVal) {
-      //console.log("Prop changed: ", newVal, " | was: ", oldVal);
+      console.log("Prop changed: ", newVal, " | was: ", oldVal);
       //this._chart.destroy();
       //this.renderChart(this.data, this.options);
       this.renderLineChart();
